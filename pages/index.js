@@ -1,11 +1,12 @@
 import React from "react";
 import { useRouter } from "next/router";
+import { formateDate } from "../utils/formatDate";
 
 import Layout from "../components/layout";
 import TimelineSVG from "../assets/timeline.svg";
 import { Index, Timeline, Posts } from "../styles/pages/home";
 
-function Home({ json }) {
+function Home({ posts }) {
   const { push } = useRouter();
   function handleClickNavigateToPost(id) {
     push(`/${id}`);
@@ -23,16 +24,16 @@ function Home({ json }) {
         <TimelineSVG />
       </Index>
       <Timeline id="posts">
-        {json.data.posts.map((post) => {
+        {posts.data.posts.map((post) => {
           return (
             <Posts key={post.id}>
-              <img src={process.env.API_URL + post.photo.url} width="200" />
+              <img src={process.env.API_URL + post.media[0].url} width="200" />
               <div>
                 <h1>{post.title}</h1>
-                <p>Criador em : {post.created_at}</p>
+                <p>Criado em : {formateDate(post.created_at)}</p>
                 <button
                   type="button"
-                  onClick={() => handleClickNavigateToPost(post.id)}
+                  onClick={() => handleClickNavigateToPost(post.slug)}
                 >
                   Ler post
                 </button>
@@ -48,7 +49,7 @@ function Home({ json }) {
 export const getStaticProps = async () => {
   const query = {
     query:
-      "query { posts {   id    title    created_at    photo {      url    }  }}",
+      "query { posts(limit: 10) {id title slug created_at media { url } } }",
   };
 
   const response = await fetch(process.env.API_URL + "/graphql", {
@@ -62,7 +63,10 @@ export const getStaticProps = async () => {
   const json = await response.json();
 
   return {
-    props: { json },
+    props: {
+      posts: json,
+    },
+    revalidate: 20,
   };
 };
 

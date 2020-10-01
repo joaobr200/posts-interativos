@@ -1,5 +1,5 @@
 module.exports = {
   env: {
-    API_URL: "https://test-strapi-with0cms.herokuapp.com",
+    API_URL: "https://posts-interativos-strapi.herokuapp.com",
   },
 };

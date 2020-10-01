@@ -11,7 +11,7 @@ export const Post = styled.article`
   margin-top: 60px;
 
   > img {
-    width: 100%;
+    width: 250px;
   }
 `;
 
