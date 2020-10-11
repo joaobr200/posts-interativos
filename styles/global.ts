@@ -13,7 +13,14 @@ export default createGlobalStyle`
     }
 
     body {
-      background: #f6f6f6;
+      background: ${({ theme }) => theme.background};
+      color: ${({ theme }) => theme.colors.black};
       font-family: "Roboto", sans-serif;
+    }
+
+    .container {
+      width:100%;
+      max-width:1024px;
+      margin:0 auto;
     }
 `;
